@@ -1,11 +1,19 @@
 {
-  "name": "logger",
-  "version": "0.2.0",
+  "name": "@kksiuda/logger",
+  "version": "0.2.1",
   "description": "Logging for node.js",
   "main": "dist/index.js",
   "author": "Krzysztof Siuda",
   "license": "MIT",
   "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/p00dle/logger"
+  },
+  "homepage": "https://github.com/p00dle/logger#readme",
+  "bugs": {
+    "url": "https://github.com/p00dle/logger/issues"
+  },
   "devDependencies": {
     "@swc-node/jest": "^1.5.2",
     "@swc-node/register": "^1.5.1",
@@ -28,6 +36,7 @@
     "validate": "tsc --noEmit",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write .",
-    "dist": "tsc --noemit && eslint . --ext .ts && prettier --write . && jest && tsc"
+    "pre-build": "tsc --noemit && eslint . --ext .ts && prettier --write . && jest",
+    "dist": "tsc"
   }
 }
