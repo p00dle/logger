@@ -1,6 +1,6 @@
 {
   "name": "@kksiuda/logger",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Logging for node.js",
   "main": "dist/index.js",
   "author": "Krzysztof Siuda",
@@ -14,6 +14,12 @@
   "bugs": {
     "url": "https://github.com/p00dle/logger/issues"
   },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "package.json"
+  ],
   "devDependencies": {
     "@swc-node/jest": "^1.5.2",
     "@swc-node/register": "^1.5.1",
