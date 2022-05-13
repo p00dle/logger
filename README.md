@@ -44,12 +44,16 @@ log.error(new Error('error message'));
 
 - input
 - params?:
-- useColors?: boolean;
-- useTimestamp?: boolean;
-- useLogLevel?: boolean;
-- useNamespace?: boolean;
-- useUTC?: boolean;
-- console?: ConsoleLike;
+  - useColors?: boolean; default: true; adds colors when logging to console:
+    - debug: gray
+    - info: green
+    - warn: yellow
+    - error: red
+  - useTimestamp?: boolean; default: true; adds timestamp at the beginning of the log; see _useUTC_
+  - useLogLevel?: boolean; default: true; adds _logLevel_ in square brackets padded to length 5
+  - useNamespace?: boolean; default: true; adds _namespace_ in square brackets if it's not empty
+  - useUTC?: boolean; default: true; formats timestamp using UTC when true, local time when false
+  - console?: ConsoleLike; default: console; used for testing and debugging
 - output
   - LogConsumer
 
