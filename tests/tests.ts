@@ -69,6 +69,30 @@ describe('Logger', () => {
     expect(logs[1].namespace).toBe('ns1');
     expect(logs[2].namespace).toBe('ns1.ns2');
   });
+  it('should use transformer when defined', () => {
+    const logs: LogMessage[] = [];
+    const consumer = collectLogs(logs);
+    function transformer(obj: { a: number; b: number }): string {
+      return '' + (obj.a + obj.b);
+    }
+    const logger = new Logger({ consumer, transformer });
+    logger.info({ a: 1, b: 2 });
+
+    expect(logs[0].payload).toBe('3');
+  });
+  it('should use transformer for subspace', () => {
+    const logs: LogMessage[] = [];
+    const consumer = collectLogs(logs);
+    const logger = new Logger({ consumer });
+    function transformer(date: Date): string {
+      return '' + +date;
+    }
+    const subLogger = logger.namespace('dates', transformer);
+    logger.info('string');
+    subLogger.info(new Date(0));
+    expect(logs[0].payload).toBe('string');
+    expect(logs[1].payload).toBe('0');
+  });
 });
 
 describe('consoleLogConsumerFactory', () => {
