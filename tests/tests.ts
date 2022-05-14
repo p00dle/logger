@@ -121,7 +121,6 @@ describe('consoleLogConsumerFactory', () => {
       useLogLevel: false,
     });
     consoleLogConsumer({ namespace: '', timestamp: Date.now(), logLevel: 'warn', payload: '' });
-    console.log(logs[0]);
     expect(logs[0]).toMatch(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3} UTC\+\d+ $/);
   });
   it('should be able to stringify error message with trace', () => {
