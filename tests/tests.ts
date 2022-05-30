@@ -8,7 +8,7 @@ describe('exports', () => {
 });
 
 describe('Logger', () => {
-  function collectLogs(arr: LogMessage[]): LogConsumer {
+  function collectLogs(arr: LogMessage<any>[]): LogConsumer<any> {
     return (log) => arr.push(log);
   }
   it('should accept partial options and use defaults when undefined', () => {
@@ -92,6 +92,17 @@ describe('Logger', () => {
     subLogger.info(new Date(0));
     expect(logs[0].payload).toBe('string');
     expect(logs[1].payload).toBe('0');
+  });
+  it('allows transformer to have more than one argument', () => {
+    const logs: LogMessage[] = [];
+    const consumer = collectLogs(logs);
+    const logger = new Logger<{ message: string; details?: string }>({ consumer });
+    function transformer(message: string, details?: string): { message: string; details?: string } {
+      return { message, details };
+    }
+    const subLogger = logger.namespace('msg', transformer);
+    subLogger.info('message', 'details');
+    expect(logs[0].payload).toEqual({ message: 'message', details: 'details' });
   });
 });
 
