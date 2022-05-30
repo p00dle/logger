@@ -24,6 +24,7 @@ Creates a [Logger](#logger) instance.
   - consumer?: [LogConsumer](#logconsumer) (default: consoleLogConsumerFactory return value);
   - logLevel: [LogLevel](#loglevel) (default: 'info');
   - logNamespace: string; (default: '')
+  - transformer: [Transformer](#transformer) (default: identity function)
 - output
   - [Logger](#logger) instance
 
@@ -37,7 +38,7 @@ log.debug('debug data');
 log.info('some information');
 log.warn('warning');
 log.error(new Error('error message'));
-// by default these logs will be output using consoleLogConsumerFactory return value
+// by default these logs will be output to console using consoleLogConsumerFactory default parameters
 ```
 
 #### consoleLogConsumerFactory
@@ -70,17 +71,18 @@ logConsumer({ namespace: 'NS', timestamp: Date.now(), logLevel: 'info', payload:
 #### Logger
 
 ```ts
-class Logger<T = string | Error> {
+class Logger<T = string | Error, I extends any[] = [T]> {
   constructor(options?: {
     consumer?: LogConsumer<T>;
     logLevel?: LogLevel;
     logNamespace?: string;
+    transformer?: Transformer<I, T>;
   })
-  debug: (payload: T) => void;
-  info: (payload: T) => void;
-  warn: (payload: T) => void;
-  error: (payload: T) => void;
-  namespace(logNamespace: string): Logger<T>;
+  debug: (...payload: T) => void;
+  info: (...payload: T) => void;
+  warn: (...payload: T) => void;
+  error: (...payload: T) => void;
+  namespace: <I extends any[]>(logNamespace: string, transformer?: Transformer<I, T>): Logger<T, I>
 ```
 
 - _logLevel_ defaults to 'info'; anything with _logLevel_ lower than the one provided will not call the consumer; when set to 'silent' it will do nothing
@@ -89,6 +91,7 @@ class Logger<T = string | Error> {
 - namespace creates a new _Logger_ instance; the instance's namespace will be:
   - if parent namespace is empty -> child namespace
   - else "[parent namespace].[child namespace]"
+  - it also allows to use a different logging format where a provided transformer outputs log payload in format accepted by parent
 
 #### LogLevel
 
@@ -111,4 +114,10 @@ interface LogMessage<T = string | Error> {
   logLevel: 'debug' | 'info' | 'warn' | 'error';
   payload: T;
 }
+```
+
+#### Transformer
+
+```ts
+type Transformer<I extends any[], O> = (...args: I) => O;
 ```
